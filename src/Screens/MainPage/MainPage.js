@@ -1,75 +1,28 @@
-import React, {useState} from 'react';
-import MapPage from './MapPage/MapPage';
-
-import {
-  Radio,
-  RadioGroup,
-  FormControlLabel,
-  FormControl,
-  FormLabel,
-  Box,
-  TextField,
-  Button,
-
-} from '@mui/material/';
+import React, { useState } from "react";
+import Form from './Form/Form'
+import Map from './Map/Map';
 
 
 const MainPage = () => {
-  const [value, setValue] = useState('cords');
-  const [latitude, setLatitude] = useState('');
-  const [longitude, setLongitude] = useState('');
-  const [locations, setLocations] = useState ([]);
+  const [locations, setLocations] = useState([]);
 
-
-  const handleChange = (event) => {
-    setValue(event.target.value);
+  const addLocation = (latitude,longitude) => {
+    setLocations([
+      ...locations,
+      {
+        location: [parseInt(latitude), parseInt(longitude)],
+        option: { color: "red" },
+      },
+    ]);
   };
 
-  const onSubmit = () => {
-    setLocations((prevValue) => [
-      ...prevValue,
-      {longitude,latitude},
-    ]);
-  }
 
   return (
     <div>
-      <FormControl component="fieldset">
-        <FormLabel component="legend">Choose a Way</FormLabel>
-        <RadioGroup
-          aria-label="Choose a Way"
-          name="controlled-radio-buttons-group"
-          value={value}
-          onChange={handleChange}
-        >
-          <FormControlLabel value="cords" control={<Radio />} label="Cords" />
-          <FormControlLabel value="place" control={<Radio />} label="Place" />
-        </RadioGroup>
-      </FormControl>
-
-      <Box
-      component="form"
-      sx={{
-        '& > :not(style)': { m: 1, width: '25ch' },
-      }}
-      noValidate
-      autoComplete="off"
-    >
-      <TextField id="outlined-basic" value={latitude} onChange={(e) =>{ 
-            setLatitude(e.target.value)
-          }} />
-      <TextField id="outlined-basic" value={longitude} onChange={(e) =>{ 
-            setLongitude(e.target.value)
-          }} />
-    </Box>
-    <Button onClick={() => onSubmit()} variant="contained">Submit</Button>
-
-
-
-      <MapPage locations={locations} />
+      <Form addLocation={addLocation} />
+      <Map locations={locations} />
     </div>
   );
 };
-
 
 export default MainPage;
